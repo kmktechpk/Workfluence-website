@@ -652,7 +652,39 @@ footer {
 
 <!-- Form UX -->
 <script>
-document.getElementById('mc-form').addEventListener('submit', function() {
+document.getElementById('mc-form').addEventListener('submit', function(e) {
+  const emailInput = this.querySelector('input[type="email"]');
+  const email = emailInput.value.trim();
+
+  // Empty check
+  if (!email) {
+    e.preventDefault();
+    emailInput.style.border = '1.5px solid rgba(240,100,100,0.7)';
+    emailInput.placeholder = 'please enter your email first..';
+    emailInput.focus();
+    setTimeout(function() {
+      emailInput.style.border = '';
+      emailInput.placeholder = 'drop your email, be first in..';
+    }, 3000);
+    return;
+  }
+
+  // Basic email format check
+  const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  if (!valid) {
+    e.preventDefault();
+    emailInput.style.border = '1.5px solid rgba(240,100,100,0.7)';
+    emailInput.value = '';
+    emailInput.placeholder = 'hmm.. that does not look right..';
+    emailInput.focus();
+    setTimeout(function() {
+      emailInput.style.border = '';
+      emailInput.placeholder = 'drop your email, be first in..';
+    }, 3000);
+    return;
+  }
+
+  // Valid — show success
   setTimeout(function() {
     document.getElementById('mc-form').style.display = 'none';
     const s = document.getElementById('mc-success');
